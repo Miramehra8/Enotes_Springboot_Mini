@@ -35,6 +35,21 @@
 					</div>
 				</div>
 
+				<div class="  offset-md-1 ">
+					<p class="fw-bold mb-0 ">Total Notes: [[${totalElements}]]</p>
+				</div>
+				<nav aria-label="Page navigation example">
+					<ul class="pagination justify-content-center">
+						<li th:if="${currentPage!=0}" class="page-item"><a class="page-link" th:href="@{'/user/viewNotes?pageNo='+${currentPage-1}}">Previous</a></li>
+						
+						<li class="page-item" th:each="i:${#numbers.sequence(1, totalPages)}" th:classappend="${currentPage==i-1 ? 'active':''}">
+						<a th:href="@{'/user/viewNotes?pageNo='+${i-1}}" class="page-link">[[${i}]]</a></li>
+						
+						
+						<li th:if="${currentPage+1!=totalPages}" class="page-item"><a class="page-link" th:href="@{'/user/viewNotes?pageNo='+${currentPage+1}}">Next</a></li>
+					</ul>
+				</nav>
+
 			</div>
 		</div>
 	</section>

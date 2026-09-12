@@ -2,9 +2,9 @@ package com.example.controller;
 
 import java.security.Principal;
 import java.time.LocalDate;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.entity.Notes;
 import com.example.entity.User;
@@ -44,10 +45,13 @@ public class UserController {
 	}
 
 	@GetMapping("/viewNotes")
-	public String viewNotes(Principal p, Model m) {
+	public String viewNotes(Principal p, Model m, @RequestParam (defaultValue="0") Integer pageNo) {
 		User user = getUser(p, m);
-		List<Notes> notes = notesService.getNotesByUser(user);
-		m.addAttribute("notesList", notes);
+		Page<Notes> notes = notesService.getNotesByUser(user, pageNo);
+		m.addAttribute("currentPage", pageNo);
+		m.addAttribute("totalElements", notes.getTotalElements());
+		m.addAttribute("totalPages", notes.getTotalPages());		
+		m.addAttribute("notesList", notes.getContent());
 		return "view_notes";
 	}
 
